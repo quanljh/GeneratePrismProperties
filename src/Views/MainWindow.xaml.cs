@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Infragistics.Controls.Editors;
+using Infragistics.Controls.Editors.Primitives;
 
 namespace GeneratePrismProperties
 {
@@ -42,7 +43,18 @@ namespace GeneratePrismProperties
                 return;
 
             model.PropertyType = xamComboEditor.InputText;
-            vm.TypeList.Add(xamComboEditor.InputText);
+
+            if (!vm.TypeList.Contains(xamComboEditor.InputText))
+                vm.TypeList.Add(xamComboEditor.InputText);
+        }
+
+        private void DataGrid_OnPreparingCellForEdit(object sender, DataGridPreparingCellForEditEventArgs e)
+        {
+            if (e.EditingElement.FindVisualChild<TextBox>() is TextBox textBox)
+            {
+                textBox.Focus();
+                textBox.SelectAll();
+            }
         }
     }
 }

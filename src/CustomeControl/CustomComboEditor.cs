@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Infragistics.Controls.Editors;
+using Infragistics.Controls.Editors.Primitives;
 
 namespace GeneratePrismProperties
 {
@@ -45,8 +46,17 @@ namespace GeneratePrismProperties
     ///     <MyNamespace:CustomComboEditor/>
     ///
     /// </summary>
+    [TemplatePart(Name = "TextBoxPresenter", Type = typeof(SpecializedTextBox))]
     public class CustomComboEditor : XamComboEditor
     {
+        #region Private Members
+
+        /// <summary>
+        /// Textbox of this ComboEditor
+        /// </summary>
+        private SpecializedTextBox _specializedTextBox;
+
+        #endregion
 
         public string InputText
         {
@@ -63,6 +73,19 @@ namespace GeneratePrismProperties
         static CustomComboEditor()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(CustomComboEditor), new FrameworkPropertyMetadata(typeof(CustomComboEditor)));
+        }
+
+        /// <inheritdoc />
+        public override void OnApplyTemplate()
+        {
+            base.OnApplyTemplate();
+            _specializedTextBox = Template.FindName("TextBoxPresenter", this) as SpecializedTextBox;
+        }
+
+        public void SelectAllText()
+        {
+            _specializedTextBox?.Focus();
+            _specializedTextBox?.SelectAll();
         }
     }
 }

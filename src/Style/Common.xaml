@@ -363,7 +363,8 @@
     <!--#endregion-->
 
     <Style TargetType="{x:Type TextBox}">
-        <Setter Property="Padding" Value="2,3,0,0" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Padding" Value="2,0,0,0" />
         <Setter Property="Height" Value="30" />
     </Style>
 
@@ -376,7 +377,8 @@
         <Setter Property="BorderThickness" Value="0" />
         <Style.Triggers>
             <Trigger Property="IsSelected" Value="True">
-                <Setter Property="Foreground" Value="{StaticResource ForegroundBlackBrush}" />
+                <Setter Property="Background" Value="{StaticResource BackgroundAquaBrush}" />
+                <Setter Property="Foreground" Value="{StaticResource BackgroundWhiteBrush}" />
             </Trigger>
         </Style.Triggers>
     </Style>

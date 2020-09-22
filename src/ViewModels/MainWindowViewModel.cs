@@ -171,97 +171,101 @@ namespace GeneratePrismProperties
 
                 sb.AppendLine("        /// <summary>");
                 sb.AppendLine($"        /// {propertyModel.Discription}");
-                sb.AppendLine("        /// <summary>");
-                sb.AppendLine($"        private {propertyModel.PropertyType} _{lowercaseName}");
+                sb.AppendLine("        /// </summary>");
+                sb.AppendLine($"        private {propertyModel.PropertyType} _{lowercaseName};");
                 sb.AppendLine();
                 sb.AppendLine($"        public {propertyModel.PropertyType} {propertyModel.PropertyName}");
                 sb.AppendLine("        {");
                 sb.AppendLine($"            get => _{lowercaseName};");
                 sb.AppendLine($"            set => SetProperty(ref _{lowercaseName}, value);");
                 sb.AppendLine("        }");
+                sb.AppendLine();
             }
 
             sb.AppendLine("    }");
 
+
+            var i = 0;
+            string filePath = default(string);
+            while (true)
+            {
+                filePath = i == 0 ? $@"{OutputPath}\Property.cs" : $@"{OutputPath}\Property{i}.cs";
+
+                if (File.Exists(filePath))
+                    i++;
+                else
+                    break;
+            }
+
             try
             {
-                var i = 0;
-                string filePath = default(string);
-                while (true)
-                {
-                    filePath = i == 0 ? $@"{OutputPath}\Property.cs" : $@"{OutputPath}\Property{i}.cs";
-
-                    if (File.Exists(filePath))
-                        i++;
-                    else
-                        break;
-                }
-
                 File.WriteAllText(filePath, sb.ToString(), Encoding.UTF8);
-
-                Logger.LogInformation($"Property.cs have been generated successfully at {filePath}");
-
-                Process.Start(filePath);
-
-                //// Check VS Code is installed
-                //var process = Process.Start(new ProcessStartInfo
-                //{
-                //    UseShellExecute = false,
-                //    CreateNoWindow = true,
-                //    RedirectStandardOutput = true,
-                //    RedirectStandardInput = true,
-                //    FileName = "Property.cs",
-                //    Arguments = "/C code --version"
-                //});
-
-                //if (process == null)
-                //    return;
-
-                //// Start and wait for end
-                //process.WaitForExit();
-
-                //// If it did not exit...
-                //if (!process.HasExited)
-                //    // Presume it isn't installed
-                //    return;
-
-                //// Get output
-                //var codeResponse = process.StandardOutput.ReadToEnd();
-
-                //if (string.IsNullOrWhiteSpace(codeResponse))
-                //    return;
-
-                //// Get the output int lines
-                //var lines = codeResponse.Split(new[] { "\n", Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
-
-                //// First line should be version string
-                //// If it isn't...
-                //if (lines.Length <= 0 || !Version.TryParse(lines[0], out var vsVersion))
-                //    // Presume not installed
-                //    return;
-
-                //// If we get here, we have got a valid response with a version number
-                //// so it is safe to open VS Code with the folder
-                //// Open VS Code (on new task otherwise our application doesn't exit unti this does
-                //var process2 = Process.Start(new ProcessStartInfo
-                //{
-                //    // IMPORTANT: If you don't specify UseShellExecute = false
-                //    //            and CreateNoWindow = true
-                //    //            then our console will never exit until VS Code is closed
-                //    UseShellExecute = false,
-                //    CreateNoWindow = true,
-                //    FileName = "Property.cs",
-                //    Arguments = $@"/C code ""{filePath}""",
-                //});
-
-
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
             }
-        }
 
-        #endregion
+            //Logger.LogInformation($"Property.cs have been generated successfully at {filePath}");
+            MessageBox.Show($"Property.cs have been generated successfully at {filePath}", "Information",
+                MessageBoxButton.OK);
+
+            Process.Start(filePath);
+
+            //// Check VS Code is installed
+            //var process = Process.Start(new ProcessStartInfo
+            //{
+            //    UseShellExecute = false,
+            //    CreateNoWindow = true,
+            //    RedirectStandardOutput = true,
+            //    RedirectStandardInput = true,
+            //    FileName = "Property.cs",
+            //    Arguments = "/C code --version"
+            //});
+
+            //if (process == null)
+            //    return;
+
+            //// Start and wait for end
+            //process.WaitForExit();
+
+            //// If it did not exit...
+            //if (!process.HasExited)
+            //    // Presume it isn't installed
+            //    return;
+
+            //// Get output
+            //var codeResponse = process.StandardOutput.ReadToEnd();
+
+            //if (string.IsNullOrWhiteSpace(codeResponse))
+            //    return;
+
+            //// Get the output int lines
+            //var lines = codeResponse.Split(new[] { "\n", Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+
+            //// First line should be version string
+            //// If it isn't...
+            //if (lines.Length <= 0 || !Version.TryParse(lines[0], out var vsVersion))
+            //    // Presume not installed
+            //    return;
+
+            //// If we get here, we have got a valid response with a version number
+            //// so it is safe to open VS Code with the folder
+            //// Open VS Code (on new task otherwise our application doesn't exit unti this does
+            //var process2 = Process.Start(new ProcessStartInfo
+            //{
+            //    // IMPORTANT: If you don't specify UseShellExecute = false
+            //    //            and CreateNoWindow = true
+            //    //            then our console will never exit until VS Code is closed
+            //    UseShellExecute = false,
+            //    CreateNoWindow = true,
+            //    FileName = "Property.cs",
+            //    Arguments = $@"/C code ""{filePath}""",
+            //});
+
+
+        }
     }
+
+    #endregion
 }
